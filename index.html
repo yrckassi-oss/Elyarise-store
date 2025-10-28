@@ -15,6 +15,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ELYARISE CANAL+ STORE</title>
     <link rel="icon" href="https://elyarise.files.wordpress.com/2024/04/cropped-cropped-elyarise-logo-1-1.png?w=32" sizes="32x32" />
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#E50914">
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- jsPDF for invoice generation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -46,9 +48,29 @@
             }
         }
     </script>
+    <style>
+        html, body, #root {
+            height: 100%;
+            margin: 0;
+            overflow: hidden; /* Prevent scrolling on the body for app-like feel */
+        }
+    </style>
 </head>
 <body class="bg-canal-dark-gray">
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    })
+                    .catch(error => {
+                        console.log('ServiceWorker registration failed: ', error);
+                    });
+            });
+        }
+    </script>
 </body>
 </html>

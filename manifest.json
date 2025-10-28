@@ -1,0 +1,23 @@
+{
+  "name": "ELYARISE CANAL+ STORE",
+  "short_name": "ELYARISE",
+  "description": "An application for ELYARISE CANAL+ STORE customers to manage their CANAL+ services, including renewals, plan changes, reactivations, and technician requests, with integrated mobile payment.",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#141414",
+  "theme_color": "#E50914",
+  "icons": [
+    {
+      "src": "https://elyarise.files.wordpress.com/2024/04/cropped-cropped-elyarise-logo-1-1.png?w=192",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://elyarise.files.wordpress.com/2024/04/cropped-cropped-elyarise-logo-1-1.png?w=512",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

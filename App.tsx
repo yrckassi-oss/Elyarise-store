@@ -1,7 +1,6 @@
-
 import React, { useState, useEffect, useCallback } from 'react';
 import type { OrderDetails, Page, User } from './types';
-import { AuthPage } from './components/AuthPage.tsx';
+import { AuthPage } from './components/AuthPage';
 import { Header } from './components/Header';
 import { MainMenu } from './components/MainMenu';
 import { ReabonnementForm } from './components/forms/ReabonnementForm';
@@ -9,8 +8,8 @@ import { ModificationForm } from './components/forms/ModificationForm';
 import { ReactivationForm } from './components/forms/ReactivationForm';
 import { TechnicienForm } from './components/forms/TechnicienForm';
 import { CartPage } from './components/CartPage';
-import { PaymentPage } from './components/PaymentPage.tsx';
-import { AdminDashboard } from './components/AdminDashboard.tsx';
+import { PaymentPage } from './components/PaymentPage';
+import { AdminDashboard } from './components/AdminDashboard';
 import { Footer } from './components/Footer';
 
 function App() {
@@ -55,21 +54,28 @@ function App() {
         setCurrentPage(page);
     };
 
-    const handleRegister = useCallback((contact: string, password: string) => {
-        if (users.some(u => u.contact === contact)) {
-            // In a real app, you'd show an error, but for this flow we log them in.
-            handleLogin(contact, false);
-        } else {
-            setUsers(prev => [...prev, { contact, password }]);
-            handleLogin(contact, false);
-        }
-    }, [users]);
-    
-    const handleLogin = (identifier: string, admin: boolean) => {
+    const setLoginState = (identifier: string, admin: boolean) => {
         setIsLoggedIn(true);
         setUserContact(identifier);
         setIsAdmin(admin);
         setCurrentPage(admin ? 'adminDashboard' : 'main');
+    };
+
+    const handleRegister = useCallback((contact: string, password: string): boolean => {
+        if (users.some(u => u.contact === contact)) {
+            return false; // User already exists
+        }
+        setUsers(prev => [...prev, { contact, password }]);
+        return true; // Registration successful
+    }, [users]);
+    
+    const handleUserLogin = (contact: string, password: string): boolean => {
+        const user = users.find(u => u.contact === contact && u.password === password);
+        if (user) {
+            setLoginState(user.contact, false);
+            return true;
+        }
+        return false; // Invalid credentials
     };
 
     const handleLogout = () => {
@@ -117,7 +123,11 @@ function App() {
     // --- RENDER LOGIC ---
     const renderPage = () => {
         if (!isLoggedIn) {
-            return <AuthPage onRegister={handleRegister} onLogin={handleLogin} />;
+            return <AuthPage 
+                onRegister={handleRegister} 
+                onUserLogin={handleUserLogin}
+                onAdminLogin={(identifier) => setLoginState(identifier, true)}
+            />;
         }
         if (isAdmin) {
             return <AdminDashboard 
@@ -152,7 +162,7 @@ function App() {
     };
 
     return (
-        <div className="bg-canal-dark-gray text-white min-h-screen flex flex-col font-sans">
+        <div className="bg-canal-dark-gray text-white h-full flex flex-col font-sans">
             <Header
                 isLoggedIn={isLoggedIn}
                 onLogout={handleLogout}
@@ -160,8 +170,8 @@ function App() {
                 onCartClick={() => !isAdmin && navigateTo('cart')}
                 isAdmin={isAdmin}
             />
-            <main className="flex-grow flex items-center justify-center p-4 sm:p-6 md:p-8">
-                <div className="w-full max-w-4xl">
+            <main className="flex-grow p-4 sm:p-6 md:p-8 overflow-y-auto">
+                <div className="w-full max-w-4xl mx-auto">
                     {renderPage()}
                 </div>
             </main>

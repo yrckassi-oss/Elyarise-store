@@ -65,8 +65,12 @@ export const PaymentPage: React.FC<PaymentPageProps> = ({ cart, onBack, onOrderC
 
                 {finalPaymentMethod === 'Orange Money' && (
                     <div className="bg-gray-800 p-4 rounded-md text-left">
-                        <p className="font-semibold mb-2">Rappel pour votre paiement Orange Money :</p>
-                        <p className="text-sm">Veuillez composer la syntaxe appropriée pour payer <span className="font-bold">{totalAmount.toLocaleString('fr-FR')} F CFA</span> au <span className="font-bold">+2250787853061</span>.</p>
+                        <p className="font-semibold mb-2">Pour finaliser votre paiement Orange Money :</p>
+                        <p className="text-sm mb-2">Veuillez composer la syntaxe suivante sur votre téléphone :</p>
+                        <code className="block bg-gray-900 p-3 rounded-md text-white text-center font-mono tracking-wider">
+                            #144*1*1*0787853061*{totalAmount}*2*CODE#
+                        </code>
+                        <p className="text-xs text-canal-light-gray mt-2">Remplacez <span className="font-semibold text-white">CODE</span> par votre code secret Orange Money.</p>
                     </div>
                 )}
                  <button onClick={onBack} className="mt-4 bg-canal-red text-white py-2 px-6 rounded-md hover:bg-red-700 transition duration-300 font-semibold">
